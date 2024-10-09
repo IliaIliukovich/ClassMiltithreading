@@ -15,8 +15,8 @@ public class DaemonThreadExample {
         }
 
         Runnable task = new Task();
-        Thread thread1 = new Thread(task);
-        Thread thread2 = new Thread(task);
+        Thread thread1 = new Thread(task, "MyThread1");
+        Thread thread2 = new Thread(task, "MyThread2");
         thread1.start();
         thread2.start();
 
@@ -33,9 +33,16 @@ public class DaemonThreadExample {
                     }
                 }
             }
-        });
+        }, "MyDaemonThread");
         thread3.setDaemon(true);
         thread3.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     static class Task implements Runnable {
